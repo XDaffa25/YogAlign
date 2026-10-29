@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edukasi Postur Yoga Interaktif - 7 Pose</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--tx:#1f2a24;--mu:#66726b;--ac:#2f7d5b;--ok:#1f9d55;--bad:#d64545;--wa:#e0a82e;--bd:#e2e0d8}
+@media(prefers-color-scheme:dark){:root{--bg:#141a17;--card:#1d2621;--tx:#e8eee9;--mu:#9aa89f;--bd:#2c3831}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--tx)}
+header{padding:18px 24px;border-bottom:1px solid var(--bd)}
+h1{margin:0;font-size:1.25rem}header p{margin:4px 0 0;color:var(--mu);font-size:.9rem}
+main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:16px;padding:16px 24px;max-width:1200px;margin:auto}
+@media(max-width:820px){main{grid-template-columns:1fr;padding:12px}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+
+/* flex-wrap: wrap ditambahkan agar tombol tidak berantakan jika layar kecil */
+.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.tabs button,.go{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
+.tabs button.on,.go{background:var(--ac);color:#fff;border-color:var(--ac)}
+.tabs button:hover{background:var(--bd);}
+.tabs button.on:hover{background:var(--ac);}
+
+.stage{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3}
+video,canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.badge{position:absolute;left:0;right:0;top:0;padding:10px 14px;background:rgba(0,0,0,.6);color:#fff;font-weight:600;z-index:2}
+.msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px;z-index:3;background:rgba(0,0,0,.55)}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .15s}
+.row{display:flex;justify-content:space-between;color:var(--mu);font-size:.9rem}
+.big{font-size:1.6rem;font-weight:700;color:var(--tx)}
+ul{padding-left:0;list-style:none;margin:8px 0}
+#checks li{padding:6px 0;border-bottom:1px solid var(--bd);font-size:.92rem}
+#checks li:last-child{border:0}
+.ok{color:var(--ok)}.no{color:var(--bad)}
+h3{margin:14px 0 6px;font-size:.95rem}
+ol,.ben{margin:0;padding-left:20px;font-size:.9rem;color:var(--mu)}
+
+.hidden { display: none !important; }
+
+.ghost-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+  opacity: 0.35; 
+  pointer-events: none; 
+  z-index: 1; 
+  transition: all 0.3s ease;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Edukasi Postur Yoga Interaktif</h1>
+<p>Berbasis Computer Vision dan MediaPipe Pose. Pendeteksi otomatis 7 pose fundamental.</p>
+</header>
+<main>
+<section class="card">
+<div class="tabs">
+  <button id="t-war" class="on">Warrior II</button>
+  <button id="t-tree">Tree Pose</button>
+  <button id="t-chair">Chair Pose</button>
+  <button id="t-goddess">Goddess Pose</button>
+  <button id="t-lunge">High Lunge</button>
+  <button id="t-triangle">Triangle</button>
+  <button id="t-mountain">Mountain</button>
+</div>
+<div class="stage">
+  <video id="v" playsinline muted></video>
+  <canvas id="c"></canvas>
+  
+  <!-- Gambar bayangan transparan untuk panduan postur -->
+  <img id="ghost" class="ghost-overlay" src="Warior_siluet.png" alt="Panduan Pose">
+  
+  <div class="badge" id="badge">Siap</div>
+  <div class="msg" id="start">
+    <div>
+      <p>Berdirilah 2 sampai 3 meter dari kamera hingga seluruh tubuh terlihat.</p>
+      <button class="go" id="go">Mulai Kamera</button>
+    </div>
+  </div>
+</div>
+</section>
+<aside class="card">
+<div class="row"><span>Skor kebenaran pose</span><span class="big" id="score">0%</span></div>
+<div class="bar"><i id="sbar"></i></div>
+<div class="row"><span>Tahan pose (target 10 dtk)</span><span class="big" id="timer">0.0</span></div>
+<div class="bar"><i id="tbar"></i></div>
+<h3>Umpan balik sendi</h3>
+<ul id="checks"><li>Menunggu deteksi tubuh...</li></ul>
+<h3>Langkah</h3><ol id="steps"></ol>
+<h3>Manfaat</h3><ul class="ben" id="ben"></ul>
+</aside>
+</main>
+<script type="module">
+import {PoseLandmarker,FilesetResolver,DrawingUtils} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.mjs";
+const $=i=>document.getElementById(i);
+
+// Database 7 Pose Yoga
+const INFO={
+ war:{n:"Warrior II",steps:["Buka kaki selebar sekitar 1 tungkai.","Tekuk lutut depan hingga sekitar 90°, lutut belakang lurus.","Rentangkan kedua lengan sejajar bahu.","Pandang ke arah tangan depan, tahan sambil bernapas."],ben:["Menguatkan paha dan betis","Membuka pinggul dan dada","Melatih stamina dan fokus"]},
+ tree:{n:"Tree Pose",steps:["Berdiri tegak, pindahkan berat badan ke satu kaki.","Tekuk lutut lain, letakkan telapak di betis atau paha dalam.","Satukan tangan di dada atau angkat ke atas kepala.","Fokus pada satu titik, tahan sambil bernapas."],ben:["Melatih keseimbangan","Menguatkan kaki dan inti tubuh","Meningkatkan konsentrasi"]},
+ chair:{n:"Chair Pose",steps:["Berdiri tegak, angkat kedua lengan lurus ke telinga.","Tekuk kedua lutut seolah-olah sedang duduk di kursi.","Condongkan punggung sedikit ke depan.","Tahan posisi sambil bernapas teratur."],ben:["Menguatkan otot paha dan pergelangan kaki","Melatih otot punggung bawah","Menstimulasi organ perut"]},
+ goddess:{n:"Goddess Pose",steps:["Buka kedua kaki lebar, putar telapak kaki ke luar.","Tekuk lutut hingga paha sejajar lantai (squat).","Angkat lengan sejajar bahu, tekuk siku 90° ke atas.","Buka dada dan tahan posisi."],ben:["Menguatkan tubuh bagian bawah","Membuka pinggul dan dada","Melancarkan peredaran darah"]},
+ lunge:{n:"High Lunge",steps:["Langkahkan satu kaki ke depan dan tekuk 90°.","Kaki belakang ditarik lurus ke belakang.","Angkat kedua lengan lurus ke atas.","Angkat tumit belakang, pandangan ke depan."],ben:["Meregangkan otot paha depan","Meningkatkan kekuatan inti","Melatih keseimbangan"]},
+ triangle:{n:"Triangle Pose",steps:["Buka kaki lebar, rentangkan lengan ke samping.","Putar satu telapak kaki menghadap ke luar.","Condongkan tubuh dan turunkan satu tangan ke pergelangan kaki.","Arahkan tangan lainnya lurus ke langit-langit."],ben:["Meregangkan seluruh tubuh","Meringankan sakit punggung","Membuka dada dan bahu"]},
+ mountain:{n:"Mountain Pose",steps:["Berdiri tegak, rapatkan kedua kaki.","Biarkan kedua lengan rileks di samping tubuh.","Tarik napas panjang, busungkan dada.","Fokus ke depan dan tenangkan pikiran."],ben:["Memperbaiki postur tubuh","Memperkuat paha dan lutut","Menenangkan sistem saraf"]}
+};
+
+let cur="war",pl,running=false;
+const P={ls:11,rs:12,le:13,re:14,lw:15,rw:16,lh:23,rh:24,lk:25,rk:26,la:27,ra:28};
+const ang=(a,b,c)=>{let d=Math.abs((Math.atan2(c.y-b.y,c.x-b.x)-Math.atan2(a.y-b.y,a.x-b.x))*180/Math.PI);return d>180?360-d:d};
+const hist={};
+const smooth=(k,v)=>{(hist[k]=hist[k]||[]).push(v);if(hist[k].length>5)hist[k].shift();return hist[k].reduce((a,b)=>a+b)/hist[k].length};
+
+// Mesin Deteksi 7 Pose Yoga
+function evalPose(lm){
+ const g={};for(const k in P)g[k]=lm[P[k]];
+ if(Object.values(g).some(p=>(p.visibility??1)<0.5))return null;
+ 
+ // Kalkulasi sudut global
+ const lk=smooth("lk",ang(g.lh,g.lk,g.la)), rk=smooth("rk",ang(g.rh,g.rk,g.ra));
+ const le=smooth("le",ang(g.ls,g.le,g.lw)), re=smooth("re",ang(g.rs,g.re,g.rw));
+ const lsh=smooth("lsh",ang(g.lh,g.ls,g.le)), rsh=smooth("rsh",ang(g.rh,g.rs,g.re));
+ const sw=Math.abs(g.ls.x-g.rs.x), hw=Math.abs(g.lh.x-g.rh.x);
+ const fw=Math.abs(g.la.x-g.ra.x); // Lebar pijakan kaki
+ const c=(ok,y,n)=>({ok,t:ok?y:n});
+
+ switch(cur) {
+  case "war":
+   const fk1 = Math.min(lk, rk), bk1 = Math.max(lk, rk);
+   return [
+    c(le>160,"Siku kiri lurus","Luruskan siku kiri"),
+    c(re>160,"Siku kanan lurus","Luruskan siku kanan"),
+    c(Math.abs(g.lw.y-g.ls.y)<.5*sw&&Math.abs(g.rw.y-g.rs.y)<.5*sw,"Lengan sejajar bahu","Angkat/turunkan lengan hingga sejajar bahu"),
+    c(fw>1.2*sw,"Lebar kaki cukup","Lebarkan jarak kedua kaki"),
+    c(fk1>=80&&fk1<=125,"Lutut depan tertekuk","Tekuk lutut depan lebih dalam"),
+    c(bk1>160,"Lutut belakang lurus","Luruskan lutut belakang")
+   ];
+   
+  case "tree":
+   const leftStand=lk>rk;
+   const st=leftStand?{k:lk,kn:g.lk,h:g.lh}:{k:rk,kn:g.rk,h:g.rh};
+   const bt=leftStand?{k:rk,a:g.ra}:{k:lk,a:g.la};
+   return [
+    c(st.k>160,"Kaki penopang lurus","Luruskan kaki penopang"),
+    c(bt.k<120,"Lutut terangkat tertekuk","Tekuk lutut kaki yang diangkat"),
+    c(bt.a.y<st.kn.y+.05,"Telapak kaki diangkat","Angkat telapak kaki ke betis/paha"),
+    c(Math.abs(bt.a.x-st.h.x)<hw*1.5,"Kaki menempel","Rapatkan telapak kaki ke penopang")
+   ];
+   
+  case "chair":
+   return [
+    c(lk>=90 && lk<=150 && rk>=90 && rk<=150, "Kedua lutut ditekuk", "Tekuk lutut seperti duduk di kursi"),
+    c(lsh>130 && rsh>130, "Lengan terangkat ke atas", "Angkat lurus kedua lengan ke atas"),
+    c(le>150 && re>150, "Siku lurus", "Luruskan lenganmu")
+   ];
+
+  case "goddess":
+   return [
+    c(fw>1.2*sw, "Kaki terbuka lebar", "Buka kakimu lebih lebar"),
+    c(lk>=80 && lk<=130 && rk>=80 && rk<=130, "Lutut ditekuk (Squat)", "Tekuk kedua lututmu"),
+    c(lsh>=70 && lsh<=120 && rsh>=70 && rsh<=120, "Lengan sejajar bahu", "Angkat siku sejajar bahu"),
+    c(le>=70 && le<=120 && re>=70 && re<=120, "Siku ditekuk 90°", "Tekuk siku (bentuk kaktus)")
+   ];
+
+  case "lunge":
+   const fl2 = Math.min(lk, rk), bl2 = Math.max(lk, rk);
+   return [
+    c(fl2>=70 && fl2<=115, "Lutut depan ditekuk 90°", "Tekuk lutut depan"),
+    c(bl2>150, "Kaki belakang ditarik lurus", "Luruskan kaki belakang"),
+    c(lsh>130 && rsh>130, "Lengan lurus ke atas", "Angkat kedua lengan ke atas")
+   ];
+
+  case "triangle":
+   return [
+    c(fw>1.2*sw, "Kaki terbuka lebar", "Buka kaki lebih lebar"),
+    c(lk>160 && rk>160, "Kedua lutut lurus", "Luruskan kedua lutut"),
+    c(le>160 && re>160, "Kedua lengan lurus", "Luruskan lengan"),
+    c(lsh>70 && rsh>70, "Lengan direntangkan", "Rentangkan lenganmu")
+   ];
+
+  case "mountain":
+   return [
+    c(lk>160 && rk>160, "Berdiri tegak", "Luruskan kedua lutut"),
+    c(fw < hw * 1.5, "Kaki dirapatkan", "Rapatkan kakimu"),
+    c(lsh<45 && rsh<45, "Lengan di samping badan", "Turunkan lengan ke bawah"),
+    c(le>150 && re>150, "Siku lurus", "Luruskan lengan")
+   ];
+ }
+}
+
+let hold=0,last=performance.now(),lastBad=0,lastT=-1;
+
+// Konfigurasi Gambar Siluet
+const GHOST_DATA = {
+ "war": { src: "Warior_siluet.png", scale: "scale(0.65)" },
+ "tree": { src: "Tree_Pose.png", scale: "scale(0.80)" },
+ "chair": { src: "chair_siluet.png", scale: "scale(0.70)" },
+ "goddess": { src: "goddess_siluet.png", scale: "scale(0.70)" },
+ "lunge": { src: "lunge_siluet.png", scale: "scale(0.65)" },
+ "triangle": { src: "triangle_siluet.png", scale: "scale(0.70)" },
+ "mountain": { src: "mountain_siluet.png", scale: "scale(0.85)" }
+};
+
+function setPose(p){
+ cur=p;
+ // Nyalakan tab yang aktif
+ const allPoses = ["war", "tree", "chair", "goddess", "lunge", "triangle", "mountain"];
+ allPoses.forEach(pos => {
+  const btn = $("t-" + pos);
+  if(btn) btn.classList.toggle("on", p === pos);
+ });
+
+ $("steps").innerHTML=INFO[p].steps.map(s=>`<li>${s}</li>`).join("");
+ $("ben").innerHTML=INFO[p].ben.map(s=>`<li>• ${s}</li>`).join("");
+ 
+ // Ganti gambar bayangan & skalanya
+ const ghostEl = $("ghost");
+ if(ghostEl && GHOST_DATA[p]) {
+  ghostEl.src = GHOST_DATA[p].src;
+  ghostEl.style.transform = GHOST_DATA[p].scale;
+ }
+ 
+ hold=0;
+}
+
+// Pasang Event Listener ke semua tombol
+["war", "tree", "chair", "goddess", "lunge", "triangle", "mountain"].forEach(pos => {
+ $("t-" + pos).onclick = () => setPose(pos);
+});
+
+setPose("war");
+
+function update(res){
+ const now=performance.now(),dt=now-last;last=now;
+ const cv=$("c"),ctx=cv.getContext("2d");
+ ctx.clearRect(0,0,cv.width,cv.height);
+ const lm=res.landmarks[0];
+ if(!lm){$("badge").textContent="Tubuh tidak terdeteksi";return}
+ const ch=evalPose(lm);
+ let color="#e0a82e";
+ if(!ch){$("badge").textContent="Pastikan seluruh tubuh terlihat kamera";$("checks").innerHTML="<li>Sendi belum terlihat penuh</li>";}
+ else{
+  const n=ch.filter(x=>x.ok).length,all=n===ch.length;
+  color=all?"#1f9d55":"#d64545";
+  const pct=Math.round(n/ch.length*100);
+  $("score").textContent=pct+"\%";$("sbar").style.width=pct+"%";
+  $("checks").innerHTML=ch.map(x=>`<li class="${x.ok?"ok":"no"}">${x.ok?"✔":"✖"} ${x.t}</li>`).join("");
+  if(all){hold+=dt;lastBad=0}else{lastBad+=dt;if(lastBad>600)hold=0}
+  const s=Math.min(hold/1000,10);
+  $("timer").textContent=s.toFixed(1);$("tbar").style.width=s*10+"%";
+  $("badge").textContent=s>=10?INFO[cur].n+": SELESAI! Kerja bagus":all?INFO[cur].n+": BAGUS! Tahan posisi":ch.find(x=>!x.ok).t;
+ }
+ const du=new DrawingUtils(ctx);
+ du.drawConnectors(lm,PoseLandmarker.POSE_CONNECTIONS,{color,lineWidth:4});
+ du.drawLandmarks(lm,{color:"#fff",fillColor:color,radius:3});
+}
+
+function loop(){
+ const v=$("v");
+ if(v.currentTime!==lastT&&v.readyState>=2){
+  lastT=v.currentTime;
+  const cv=$("c");if(cv.width!==v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight}
+  update(pl.detectForVideo(v,performance.now()));
+ }
+ requestAnimationFrame(loop);
+}
+
+$("go").onclick=async()=>{
+ $("go").disabled=true;$("go").textContent="Memuat model...";
+ try{
+  const fs=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm");
+  pl=await PoseLandmarker.createFromOptions(fs,{
+   baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",delegate:"GPU"},
+   runningMode:"VIDEO",numPoses:1});
+  const stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}});
+  $("v").srcObject=stream;await $("v").play();
+  $("start").classList.add("hidden");last=performance.now();loop();
+ }catch(e){$("go").disabled=false;$("go").textContent="Coba lagi";alert("Gagal memulai: "+e.message)}
+};
+</script>
+</body>
+</html>
