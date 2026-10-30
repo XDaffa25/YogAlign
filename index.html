@@ -3,41 +3,201 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edukasi Postur Yoga Interaktif - 7 Pose</title>
+<title>YogAlign — Ruang Latihan Yoga Interaktif</title>
 <style>
-:root{--bg:#f6f5f1;--card:#fff;--tx:#1f2a24;--mu:#66726b;--ac:#2f7d5b;--ok:#1f9d55;--bad:#d64545;--wa:#e0a82e;--bd:#e2e0d8}
-@media(prefers-color-scheme:dark){:root{--bg:#141a17;--card:#1d2621;--tx:#e8eee9;--mu:#9aa89f;--bd:#2c3831}}
+/* TEMA WARNA ZEN & EARTHY (YOGA VIBES) */
+:root{
+  --bg: #f4f6f3;
+  --card: #ffffff;
+  --tx: #2c3e35;
+  --mu: #56695e;
+  --ac: #4a7c59;          /* Sage Green */
+  --ac-hover: #3b6347;
+  --ok: #2e8b57;          
+  --bad: #d96b6b;         
+  --wa: #e6a15c;          
+  --bd: #d6e2d8;
+  --shadow: 0 10px 30px rgba(74, 124, 89, 0.08);
+}
+
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--tx)}
-header{padding:18px 24px;border-bottom:1px solid var(--bd)}
-h1{margin:0;font-size:1.25rem}header p{margin:4px 0 0;color:var(--mu);font-size:.9rem}
-main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:16px;padding:16px 24px;max-width:1200px;margin:auto}
-@media(max-width:820px){main{grid-template-columns:1fr;padding:12px}}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+body{margin:0;font-family:system-ui, -apple-system, Segoe UI, sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
 
-/* flex-wrap: wrap ditambahkan agar tombol tidak berantakan jika layar kecil */
-.tabs{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-.tabs button,.go{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer}
-.tabs button.on,.go{background:var(--ac);color:#fff;border-color:var(--ac)}
-.tabs button:hover{background:var(--bd);}
-.tabs button.on:hover{background:var(--ac);}
+header{
+  padding:24px;
+  background: linear-gradient(135deg, #e8f0eb 0%, #d8e6db 100%);
+  border-bottom: 1px solid var(--bd);
+  text-align:center;
+  transition: all 0.3s ease;
+}
+h1{margin:0;font-family:"Iowan Old Style",Georgia,serif;font-size:clamp(1.6rem,4vw,2.2rem);color:var(--ac);font-weight:700;letter-spacing:0.5px;}
+header p{margin:8px 0 0;color:var(--mu);font-size:1.05rem;}
 
-.stage{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3}
+main{
+  display:grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(340px, 1fr);
+  gap:24px;
+  padding:24px;
+  max-width:1450px;
+  margin:auto;
+  transition: all 0.3s ease;
+}
+@media(max-width:950px){main{grid-template-columns:1fr;padding:14px}}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--bd);
+  border-radius:20px;
+  padding:20px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+/* TAB POSE YOGA */
+.tabs{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.tabs button,.go{
+  font:inherit;
+  padding:12px 18px;
+  border-radius:30px;
+  border:1px solid var(--bd);
+  background:#f9fbf9;
+  color:var(--tx);
+  cursor:pointer;
+  font-weight:600;
+  transition:all 0.3s ease;
+}
+.tabs button.on,.go{
+  background:var(--ac);
+  color:#fff;
+  border-color:var(--ac);
+  box-shadow: 0 4px 12px rgba(74,124,89,0.3);
+}
+.tabs button:hover{background:#edf4ef;border-color:var(--ac);}
+
+/* AREA KAMERA & STAGE */
+.stage{
+  position:relative;
+  background:#111;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:var(--ar,4/3);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+}
 video,canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
-.badge{position:absolute;left:0;right:0;top:0;padding:10px 14px;background:rgba(0,0,0,.6);color:#fff;font-weight:600;z-index:2}
-.msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px;z-index:3;background:rgba(0,0,0,.55)}
-.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}
-.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .15s}
-.row{display:flex;justify-content:space-between;color:var(--mu);font-size:.9rem}
-.big{font-size:1.6rem;font-weight:700;color:var(--tx)}
-ul{padding-left:0;list-style:none;margin:8px 0}
-#checks li{padding:6px 0;border-bottom:1px solid var(--bd);font-size:.92rem}
-#checks li:last-child{border:0}
-.ok{color:var(--ok)}.no{color:var(--bad)}
-h3{margin:14px 0 6px;font-size:.95rem}
-ol,.ben{margin:0;padding-left:20px;font-size:.9rem;color:var(--mu)}
+
+/* BANNER UMPAN BALIK RAKSASA */
+.feedback-banner{
+  position:absolute;
+  bottom:clamp(10px,2vw,24px);
+  left:clamp(10px,2vw,24px);
+  right:clamp(10px,2vw,24px);
+  padding:clamp(10px,2.5vw,22px);
+  text-align:center;
+  border-radius:16px;
+  background:rgba(30, 40, 35, 0.88);
+  backdrop-filter: blur(8px);
+  border:3px solid var(--wa);
+  color:#fff;
+  z-index:10;
+  transition:all 0.3s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+.feedback-banner h2{margin:0;font-size:clamp(1.1rem,4.5vw,2.2rem);font-weight:800;letter-spacing:1px;}
+.feedback-banner p{margin:6px 0 0 0;font-size:clamp(.9rem,2.8vw,1.4rem);font-weight:500;color:#e2eee6;}
+
+/* KONTROL POJOK ATAS (TIMER, VOLUME, FULLSCREEN) */
+.top-controls{position:absolute;top:20px;right:20px;display:flex;gap:12px;align-items:center;z-index:10;}
+.timer-box{
+  background:rgba(30, 40, 35, 0.88);
+  backdrop-filter: blur(8px);
+  color:#fff;
+  padding:8px clamp(10px,2vw,24px);
+  border-radius:14px;
+  font-size:clamp(1.1rem,3.5vw,2rem);
+  font-weight:bold;
+  border:2px solid rgba(255,255,255,0.3);
+}
+.ctrl-btn{
+  background:rgba(30, 40, 35, 0.88);
+  backdrop-filter: blur(8px);
+  color:#fff;
+  border:2px solid rgba(255,255,255,0.3);
+  border-radius:14px;
+  padding:8px 14px;
+  font-size:clamp(1rem,2.5vw,1.3rem);
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.ctrl-btn:hover{background:rgba(74, 124, 89, 0.9);}
+
+/* OVERLAY MULAI */
+.msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;padding:30px;z-index:20;background:rgba(25, 35, 30, 0.85);backdrop-filter: blur(5px);}
+.msg p{font-size:1.4rem;margin-bottom:24px;line-height:1.5;max-width:500px;}
+
+/* PANEL SAMPING */
+.bar{height:12px;background:#e2e8e4;border-radius:6px;overflow:hidden;margin:8px 0 16px 0}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .2s ease}
+.row{display:flex;justify-content:space-between;color:var(--mu);font-size:1.05rem;font-weight:600;}
+.big{font-size:2rem;font-weight:800;color:var(--ac)}
+ul{padding-left:0;list-style:none;margin:12px 0}
+#checks li{
+  padding:10px 14px;
+  margin-bottom:8px;
+  background:#f9fbf9;
+  border-radius:10px;
+  border:1px solid var(--bd);
+  font-size:1.1rem;
+  font-weight:600;
+}
+.ok{color:#2e8b57 !important; border-color:#b5e0c4 !important; background:#f0f9f3 !important;}
+.no{color:#d96b6b !important; border-color:#f5c6c6 !important; background:#fdf4f4 !important;}
+
+h3{margin:20px 0 10px;font-size:1.2rem;color:var(--ac);border-bottom:2px solid var(--bd);padding-bottom:6px;}
+ol,.ben{margin:0;padding-left:20px;font-size:1.02rem;color:var(--mu);line-height:1.6;}
+ol li, .ben li{margin-bottom:6px;}
 
 .hidden { display: none !important; }
+
+/* KELAS MODE FULLSCREEN KHUSUS KAMERA */
+body.fullscreen-mode header,
+body.fullscreen-mode aside.card,
+body.fullscreen-mode .tabs,
+body.fullscreen-mode .card > *:not(.stage) {
+  display: none !important;
+}
+
+body.fullscreen-mode {
+  background: #000;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+body.fullscreen-mode main {
+  display: block;
+  padding: 0;
+  margin: 0;
+  max-width: 100vw;
+  height: 100vh;
+}
+
+body.fullscreen-mode .card {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background: #000;
+  box-shadow: none;
+  height: 100vh;
+  width: 100vw;
+}
+
+body.fullscreen-mode .stage {
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  aspect-ratio: unset;
+}
 
 .ghost-overlay {
   position: absolute;
@@ -45,242 +205,571 @@ ol,.ben{margin:0;padding-left:20px;font-size:.9rem;color:var(--mu)}
   width: 100%;
   height: 100%;
   object-fit: contain; 
-  opacity: 0.35; 
+  opacity: 0.28; 
   pointer-events: none; 
-  z-index: 1; 
+  z-index: 2; 
   transition: all 0.3s ease;
 }
+.tabs button.done::after{content:" ✓";color:var(--ok)}
+.tabs button.on.done::after{color:#fff}
+.sec{width:100%;margin-top:14px}
+.note{margin:16px 0 0;font-size:.92rem;color:var(--mu);line-height:1.5}
+.tabs button:focus-visible,.go:focus-visible,.ctrl-btn:focus-visible{outline:3px solid var(--wa);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* TEMA ALAM */
+:root{--bg:#eceee2;--card:#fcfbf4;--tx:#27342b;--mu:#566650;--ac:#4d7340;--ac-hover:#3d5d33;--ok:#3f8a4f;--bad:#c9604f;--wa:#c58b45;--bd:#d8dcc4;--shadow:0 8px 24px rgba(60,80,40,.10)}
+body{background:linear-gradient(180deg,#e2e9d3 0,var(--bg) 320px) fixed}
+header{padding:28px 24px 64px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0 70C200 20 400 110 640 60S1000 20 1200 70V120H0Z' fill='%23b9cc9a' opacity='.65'/%3E%3Cpath d='M0 92C240 50 460 120 700 85S1020 55 1200 95V120H0Z' fill='%236f9457' opacity='.5'/%3E%3C/svg%3E") bottom/100% 64px no-repeat,linear-gradient(#e3ebd2,#d3e0bd);border-bottom:0}
+.card{border-radius:26px}
+.tabs button{background:#f5f6ea}
+/* BANNER RINGKAS */
+.feedback-banner{left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);bottom:12px;padding:8px 18px;border-width:2px;border-radius:18px;background:rgba(28,40,28,.6)}
+.feedback-banner h2{font-size:clamp(.85rem,2.6vw,1.05rem);letter-spacing:.5px}
+.feedback-banner p{font-size:clamp(.8rem,2.4vw,1rem);margin:2px 0 0}
+.top-controls{top:12px;right:12px;gap:8px}
+.timer-box{font-size:clamp(.95rem,3vw,1.25rem);padding:6px 14px}
+.ctrl-btn{padding:6px 10px}
+/* FITUR TAMBAHAN */
+.opts{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:4px 0 8px;color:var(--mu);font-weight:600}
+.opts select{font:inherit;padding:6px 10px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--tx)}
+.breath{display:flex;align-items:center;gap:14px;margin:6px 0 4px;color:var(--mu);font-weight:600}
+.breath b{width:44px;height:44px;display:grid;place-items:center}
+.breath i{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#bcd3a0,#7fa66a);animation:breath 8s ease-in-out infinite}
+@keyframes breath{0%,100%{transform:scale(.55)}50%{transform:scale(1)}}
+#log li{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;margin-bottom:6px;background:#f5f6ea;border:1px solid var(--bd);border-radius:10px;font-size:.95rem}
+#log em{color:var(--mu);font-style:normal;font-size:.85rem}
+.btns{display:flex;gap:8px}
+.btns .go{flex:1;padding:9px 12px;font-size:.9rem}
+.go.alt{background:transparent;color:var(--ac);box-shadow:none}
+@media(prefers-reduced-motion:reduce){.breath i{animation:none}}
+.linkbtn{font:inherit;background:none;border:0;padding:0 0 8px;color:var(--ac);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(25,35,25,.7)}
+.demo-box{position:relative;width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--card);border-radius:22px;padding:18px}
+.demo-box h3{margin:0 0 12px;padding-right:44px}
+.demo-box video,.demo-box img{position:static;transform:none;width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:14px;background:#111;display:block}
+#demo-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;border:1px solid var(--bd);background:#fff;font-size:1.1rem;cursor:pointer}
+.yt{position:relative;aspect-ratio:16/9}
+.yt iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:14px;background:#111}
+.demo-box a{color:var(--ac);font-weight:700}
+#ghost-warn{position:absolute;left:12px;top:12px;z-index:5;max-width:60%;background:rgba(201,96,79,.92);color:#fff;padding:6px 10px;border-radius:10px;font-size:.8rem;line-height:1.35}
 </style>
 </head>
 <body>
 <header>
-<h1>Edukasi Postur Yoga Interaktif</h1>
-<p>Berbasis Computer Vision dan MediaPipe Pose. Pendeteksi otomatis 7 pose fundamental.</p>
+<h1>🌿 YogAlign</h1>
+<p>Ruang latihan yoga interaktif berstandar tinggi dengan koreksi postur berbasis AI.</p>
 </header>
 <main>
 <section class="card">
 <div class="tabs">
-  <button id="t-war" class="on">Warrior II</button>
-  <button id="t-tree">Tree Pose</button>
-  <button id="t-chair">Chair Pose</button>
-  <button id="t-goddess">Goddess Pose</button>
-  <button id="t-lunge">High Lunge</button>
+  <button id="t-mountain" class="on">Mountain</button>
+  <button id="t-salute">Upward Salute</button>
+  <button id="t-war">Warrior II</button>
+  <button id="t-revwar">Reverse Warrior</button>
+  <button id="t-sideangle">Side Angle</button>
   <button id="t-triangle">Triangle</button>
-  <button id="t-mountain">Mountain</button>
+  <button id="t-goddess">Goddess</button>
+  <button id="t-tree">Tree</button>
+  <button id="t-halfmoon">Half Moon</button>
+  <button id="t-sidebend">Side Bend</button>
 </div>
-<div class="stage">
+<div class="stage" id="stage-container">
   <video id="v" playsinline muted></video>
   <canvas id="c"></canvas>
   
-  <!-- Gambar bayangan transparan untuk panduan postur -->
-  <img id="ghost" class="ghost-overlay" src="Warior_siluet.png" alt="Panduan Pose">
+  <img id="ghost" class="ghost-overlay" src="img/Warior_siluet.png" alt="Panduan Pose">
+  <div id="ghost-warn" class="hidden"></div>
   
-  <div class="badge" id="badge">Siap</div>
+  <div class="top-controls">
+    <button id="cam-toggle" class="ctrl-btn" title="Matikan/nyalakan kamera">📷</button>
+    <button id="gh-toggle" class="ctrl-btn" title="Tampilkan/sembunyikan bayangan pose">👤</button>
+    <button id="vol-toggle" class="ctrl-btn" title="Nyalakan/Matikan Suara">🔊</button>
+    <button id="fs-toggle" class="ctrl-btn" title="Mode Fullscreen">⛶</button>
+    <div class="timer-box" id="timer-display">0.0s</div>
+  </div>
+
+  <div class="feedback-banner" id="feedback-banner">
+    <h2 id="feedback-title">SIAP BERLATIH</h2>
+    <p id="feedback-desc">Ambil jarak 2-3 meter agar tubuh terlihat utuh</p>
+  </div>
+
   <div class="msg" id="start">
     <div>
-      <p>Berdirilah 2 sampai 3 meter dari kamera hingga seluruh tubuh terlihat.</p>
-      <button class="go" id="go">Mulai Kamera</button>
+      <p>Namaste 🙏 Posisikan diri Anda 2 sampai 3 meter di depan kamera untuk memulai sesi.</p>
+      <button class="go" id="go">Mulai Sesi Yoga</button>
+    </div>
+  </div>
+  <div class="msg hidden" id="cam-off">
+    <div>
+      <p>Kamera dimatikan 📷 Nyalakan lagi saat siap melanjutkan latihan.</p>
+      <button class="go" id="cam-on" type="button">Nyalakan kamera</button>
     </div>
   </div>
 </div>
 </section>
+
 <aside class="card">
-<div class="row"><span>Skor kebenaran pose</span><span class="big" id="score">0%</span></div>
+<div class="row"><span>Skor Keselarasan</span><span class="big" id="score">0%</span></div>
 <div class="bar"><i id="sbar"></i></div>
-<div class="row"><span>Tahan pose (target 10 dtk)</span><span class="big" id="timer">0.0</span></div>
+<div class="row"><span>Durasi tahan pose</span><span class="big" id="timer-text">0.0</span></div>
 <div class="bar"><i id="tbar"></i></div>
-<h3>Umpan balik sendi</h3>
+
+<div class="opts">
+  <label>Tingkat <select id="level"><option value="15">Pemula</option><option value="0">Menengah</option></select></label>
+  <label>Target tahan <select id="target"><option value="10">10 detik</option><option value="20">20 detik</option><option value="30">30 detik</option></select></label>
+  <label><input type="checkbox" id="flow"> Mode flow (lanjut otomatis)</label>
+</div>
+<div class="breath"><b><i></i></b><span id="breath-t">Tarik napas</span></div>
+<h3>Koreksi & Umpan Balik Sendi</h3>
 <ul id="checks"><li>Menunggu deteksi tubuh...</li></ul>
-<h3>Langkah</h3><ol id="steps"></ol>
-<h3>Manfaat</h3><ul class="ben" id="ben"></ul>
+
+<h3>Panduan Langkah</h3>
+<button class="linkbtn" id="demo-open" type="button">▶ Contoh video/gif gerakan <span id="demo-name"></span></button>
+<ol id="steps"></ol>
+
+<h3>Manfaat Utama</h3>
+<ul class="ben" id="ben"></ul>
+<h3>Rekap Latihan</h3>
+<p class="note" id="log-sum" style="margin:0 0 10px"></p>
+<ul id="log"></ul>
+<div class="btns"><button class="go alt" id="csv" type="button">Unduh CSV</button><button class="go alt" id="clr" type="button">Hapus riwayat</button></div>
+<button class="go sec" id="reset" type="button">↻ Ulangi pose</button>
+<p class="note">Gerak pelan dan berhenti jika terasa nyeri. Aplikasi ini hanya panduan, bukan pengganti instruktur atau tenaga medis.</p>
 </aside>
 </main>
+<div class="modal hidden" id="demo-modal" role="dialog" aria-modal="true" aria-labelledby="demo-title">
+  <div class="demo-box"><button id="demo-close" type="button" aria-label="Tutup">✕</button><h3 id="demo-title"></h3><div id="demo-body"></div></div>
+</div>
+
 <script type="module">
 import {PoseLandmarker,FilesetResolver,DrawingUtils} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.mjs";
 const $=i=>document.getElementById(i);
 
-// Database 7 Pose Yoga
 const INFO={
- war:{n:"Warrior II",steps:["Buka kaki selebar sekitar 1 tungkai.","Tekuk lutut depan hingga sekitar 90°, lutut belakang lurus.","Rentangkan kedua lengan sejajar bahu.","Pandang ke arah tangan depan, tahan sambil bernapas."],ben:["Menguatkan paha dan betis","Membuka pinggul dan dada","Melatih stamina dan fokus"]},
- tree:{n:"Tree Pose",steps:["Berdiri tegak, pindahkan berat badan ke satu kaki.","Tekuk lutut lain, letakkan telapak di betis atau paha dalam.","Satukan tangan di dada atau angkat ke atas kepala.","Fokus pada satu titik, tahan sambil bernapas."],ben:["Melatih keseimbangan","Menguatkan kaki dan inti tubuh","Meningkatkan konsentrasi"]},
- chair:{n:"Chair Pose",steps:["Berdiri tegak, angkat kedua lengan lurus ke telinga.","Tekuk kedua lutut seolah-olah sedang duduk di kursi.","Condongkan punggung sedikit ke depan.","Tahan posisi sambil bernapas teratur."],ben:["Menguatkan otot paha dan pergelangan kaki","Melatih otot punggung bawah","Menstimulasi organ perut"]},
- goddess:{n:"Goddess Pose",steps:["Buka kedua kaki lebar, putar telapak kaki ke luar.","Tekuk lutut hingga paha sejajar lantai (squat).","Angkat lengan sejajar bahu, tekuk siku 90° ke atas.","Buka dada dan tahan posisi."],ben:["Menguatkan tubuh bagian bawah","Membuka pinggul dan dada","Melancarkan peredaran darah"]},
- lunge:{n:"High Lunge",steps:["Langkahkan satu kaki ke depan dan tekuk 90°.","Kaki belakang ditarik lurus ke belakang.","Angkat kedua lengan lurus ke atas.","Angkat tumit belakang, pandangan ke depan."],ben:["Meregangkan otot paha depan","Meningkatkan kekuatan inti","Melatih keseimbangan"]},
- triangle:{n:"Triangle Pose",steps:["Buka kaki lebar, rentangkan lengan ke samping.","Putar satu telapak kaki menghadap ke luar.","Condongkan tubuh dan turunkan satu tangan ke pergelangan kaki.","Arahkan tangan lainnya lurus ke langit-langit."],ben:["Meregangkan seluruh tubuh","Meringankan sakit punggung","Membuka dada dan bahu"]},
- mountain:{n:"Mountain Pose",steps:["Berdiri tegak, rapatkan kedua kaki.","Biarkan kedua lengan rileks di samping tubuh.","Tarik napas panjang, busungkan dada.","Fokus ke depan dan tenangkan pikiran."],ben:["Memperbaiki postur tubuh","Memperkuat paha dan lutut","Menenangkan sistem saraf"]}
+ salute:{n:"Upward Salute",steps:["Berdiri tegak dengan kaki rapat atau selebar pinggul.","Angkat kedua lengan lurus ke atas lewat samping.","Luruskan siku, telapak tangan saling menghadap.","Tarik tulang ekor ke bawah, dada terbuka, pandangan ke depan."],ben:["Memanjangkan tulang belakang","Meregangkan bahu dan sisi tubuh","Meningkatkan kesadaran postur"]},
+ revwar:{n:"Reverse Warrior",steps:["Mulai dari Warrior II, tekuk lutut depan sekitar 90 derajat.","Angkat lengan depan ke atas, lengan belakang turun ke paha belakang.","Condongkan badan ke belakang, menjauhi lutut depan.","Jaga kaki belakang tetap lurus dan bernapas dalam."],ben:["Meregangkan sisi tubuh dan pinggang","Menguatkan paha dan pinggul","Membuka dada dan bahu"]},
+ sideangle:{n:"Extended Side Angle",steps:["Mulai dari Warrior II dengan lutut depan menekuk sekitar 90 derajat.","Condongkan badan ke arah lutut depan.","Turunkan satu tangan ke bawah, tangan lainnya menjangkau di atas kepala.","Buat satu garis lurus dari kaki belakang sampai ujung jari."],ben:["Meregangkan sisi tubuh dan pinggul","Menguatkan kaki dan inti","Melatih keseimbangan dan fokus"]},
+ halfmoon:{n:"Half Moon",steps:["Berdiri dengan kaki penopang lurus, miringkan badan ke samping.","Angkat kaki lainnya ke samping sejajar pinggul.","Satu tangan turun ke bawah, tangan lainnya lurus ke atas.","Buka dada dan jaga keseimbangan dengan napas tenang."],ben:["Melatih keseimbangan dan koordinasi","Menguatkan kaki penopang dan inti","Meregangkan paha belakang dan pinggul"]},
+ sidebend:{n:"Standing Side Bend",steps:["Berdiri tegak dengan kaki rapat atau selebar pinggul.","Angkat kedua lengan lurus ke atas, telapak tangan bertemu.","Lengkungkan badan ke satu sisi seperti bulan sabit.","Jaga kedua kaki tetap lurus dan dada tetap terbuka."],ben:["Meregangkan sisi tubuh dan pinggang","Meningkatkan kelenturan tulang belakang","Membuka paru-paru dan melancarkan napas"]},
+ war:{n:"Warrior II",steps:["Buka kaki selebar sekitar satu rentang tangan.","Tekuk lutut depan hingga 90 derajat, luruskan kaki belakang.","Rentangkan kedua lengan sejajar dengan bahu.","Pandangan fokus ke depan, bernapaslah dengan tenang."],ben:["Menguatkan otot kaki dan paha","Membuka area dada dan pinggul","Meningkatkan stamina & fokus mental"]},
+ tree:{n:"Tree Pose",steps:["Berdiri tegak, alihkan titik tumpu ke satu kaki.","Angkat kaki lainnya, telapak menempel di betis atau paha dalam.","Satukan tangan di depan dada atau angkat ke atas.","Fokuskan pandangan pada satu titik untuk keseimbangan."],ben:["Melatih keseimbangan tubuh","Menguatkan pergelangan kaki & inti","Menenangkan pikiran"]},
+ goddess:{n:"Goddess Pose",steps:["Buka kaki lebar, arahkan jari kaki menyerong keluar.","Tekuk lutut turun hingga paha sejajar lantai.","Angkat lengan sejajar bahu, tekuk siku 90 derajat ke atas.","Buka dada lebar-lebar dan rasakan kekuatannya."],ben:["Menguatkan tubuh bagian bawah","Membuka cakra pinggul & dada","Melancarkan sirkulasi darah"]},
+ triangle:{n:"Triangle Pose",steps:["Buka kaki lebar, rentangkan tangan ke samping.","Putar telapak kaki kanan keluar, condongkan tubuh ke samping.","Turunkan tangan menyentuh kaki, tangan kiri lurus ke atas.","Dongakkan kepala melihat arah atas."],ben:["Meregangkan seluruh sisi tubuh","Meringankan ketegangan punggung","Meningkatkan kelenturan"]},
+ mountain:{n:"Mountain Pose",steps:["Berdiri tegak, rapatkan kedua telapak kaki.","Lembutkan bahu ke belakang, lengan di samping paha.","Tarik napas dalam, kencangkan otot inti.","Tegakkan postur dan tenangkan batin."],ben:["Memperbaiki postur tubuh secara alami","Menguatkan paha, lutut, dan pergelangan","Menenangkan sistem saraf"]}
 };
 
-let cur="war",pl,running=false;
+const POSES=["mountain", "salute", "war", "revwar", "sideangle", "triangle", "goddess", "tree", "halfmoon", "sidebend"];
+let cur="mountain", pl;
+let soundEnabled = true;
+let lastSpokenText = "";
+let lastSpeechTime = 0;
+let hold = 0;
+let isCompleted = false;
+let HOLD_TARGET=10; const done=new Set();
+let errKey="", errSince=0, audioCtx=null;
+let accSum=0, accN=0;
+let flipped=false, ghostOn=true, doneMsg="";
+let rafId=0, stream=null, camOn=false;
+let tol=15; /* toleransi sudut (derajat): Pemula 15, Menengah 0 */
+/* Resolusi diminta setinggi mungkin; browser memakai yang terdekat yang didukung kamera.
+   Kalau terasa berat di perangkat lemah, turunkan ke 1920 x 1080. */
+const CAM_W=3840, CAM_H=2160, DET_W=640;
+const dc=document.createElement("canvas"), dcx=dc.getContext("2d");
+async function camStart(){
+ stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:CAM_W},height:{ideal:CAM_H},frameRate:{ideal:30},facingMode:"user"}});
+ $("v").srcObject=stream; await $("v").play();
+ camOn=true; lastT=-1; last=performance.now();
+ $("cam-off").classList.add("hidden"); $("cam-toggle").style.opacity=1; loop();
+}
+function camStop(){
+ camOn=false; cancelAnimationFrame(rafId);
+ stream?.getTracks().forEach(t=>t.stop()); stream=null; $("v").srcObject=null;
+ const cv=$("c"); cv.getContext("2d").clearRect(0,0,cv.width,cv.height);
+ window.speechSynthesis?.cancel(); errKey="";
+ $("cam-off").classList.remove("hidden"); $("cam-toggle").style.opacity=.5;
+}
+const camToggle=()=>{
+ if(camOn){camStop();return;}
+ if(!pl)return;
+ camStart().catch(e=>{$("cam-off").querySelector("p").textContent=e.name==="NotAllowedError"?"Izin kamera ditolak. Aktifkan izin kamera di browser, lalu coba lagi.":"Gagal menyalakan kamera: "+e.message});
+};
+$("cam-toggle").onclick=camToggle; $("cam-on").onclick=camToggle;
+const ASYM=new Set(["war","revwar","sideangle","triangle","tree","halfmoon","sidebend"]);
+/* Ganti path sesuai file contoh milikmu (.mp4, .webm, atau .gif) */
+/* Isi dengan link YouTube (watch / youtu.be / shorts), link .mp4/.webm, atau link .gif dari internet.
+   Kalau dikosongkan, jendela contoh menampilkan tautan pencarian YouTube untuk pose tersebut. */
+const DEMO={
+ mountain:"", salute:"", war:"", revwar:"", sideangle:"",
+ triangle:"", goddess:"", tree:"", halfmoon:"", sidebend:""
+};
+function applyGhost(){$("ghost").style.transform=`scaleX(${flipped?1:-1}) ${GHOST_DATA[cur].scale}`;}
+let lastAll=false;
+function ghostOp(all){lastAll=all;$("ghost").style.opacity=ghostOn?(all?.1:.28):0;}
+$("gh-toggle").onclick=()=>{ghostOn=!ghostOn;$("gh-toggle").style.opacity=ghostOn?1:.5;ghostOp(lastAll);};
+function ytId(u){const m=u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);return m?m[1]:null;}
+function openDemo(){
+ const src=(DEMO[cur]||"").trim(), name=INFO[cur].n, body=$("demo-body");
+ $("demo-title").textContent="Contoh gerakan "+name;
+ const id=ytId(src), search="https://www.youtube.com/results?search_query="+encodeURIComponent(name+" yoga tutorial");
+ let html="";
+ if(id) html=`<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0" title="Contoh ${name}" allow="encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+ else if(/\.(mp4|webm)(\?|$)/i.test(src)) html=`<video src="${src}" autoplay loop muted playsinline controls></video>`;
+ else if(src) html=`<img src="${src}" alt="Contoh ${name}">`;
+ else html=`<p class="note">Belum ada video contoh untuk pose ini.</p>`;
+ html+=`<p class="note"><a href="${id?"https://www.youtube.com/watch?v="+id:search}" target="_blank" rel="noopener">${id?"Buka di YouTube":"Cari contoh "+name+" di YouTube"} ↗</a></p>`;
+ body.innerHTML=html;
+ const m=body.querySelector("img,video"); if(m) m.onerror=()=>{m.outerHTML='<p class="note">Media tidak bisa dimuat. Periksa link-nya.</p>'};
+ $("demo-modal").classList.remove("hidden");
+}
+function closeDemo(){$("demo-modal").classList.add("hidden");$("demo-body").innerHTML="";}
+$("demo-open").onclick=openDemo;$("demo-close").onclick=closeDemo;
+$("demo-modal").onclick=e=>{if(e.target.id==="demo-modal")closeDemo()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDemo()});
+const ORDER=POSES, KEY="yogalign.log";
+const getLog=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}};
+function logRun(){try{const L=getLog();L.push({t:new Date().toISOString(),p:INFO[cur].n+(ASYM.has(cur)?(flipped?" (sisi 2)":" (sisi 1)"):""),a:Math.round(accSum/Math.max(accN,1)),d:HOLD_TARGET,l:tol>0?"Pemula":"Menengah"});localStorage.setItem(KEY,JSON.stringify(L.slice(-200)))}catch(e){}renderLog();}
+function renderLog(){const L=getLog();
+ const avg=L.length?Math.round(L.reduce((a,x)=>a+x.a,0)/L.length):0;
+ $("log-sum").textContent=L.length?L.length+" pose selesai, rata-rata akurasi "+avg+"%":"Belum ada riwayat. Selesaikan satu pose untuk memulai.";
+ $("log").innerHTML=L.slice(-6).reverse().map(x=>`<li><span>${x.p}<br><em>${new Date(x.t).toLocaleString("id-ID",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}${x.l?" · "+x.l:""}</em></span><b>${x.a}%</b></li>`).join("");}
+function nextPose(){if(!isCompleted)return;const i=ORDER.indexOf(cur);if(i<ORDER.length-1)setPose(ORDER[i+1]);}
+$("level").onchange=()=>{tol=+$("level").value;hold=0;isCompleted=false;accSum=0;accN=0;renderTimer();};
+$("target").onchange=()=>{HOLD_TARGET=+$("target").value;hold=0;isCompleted=false;accSum=0;accN=0;renderTimer();};
+$("csv").onclick=()=>{const rows=["waktu,pose,akurasi_persen,target_detik,tingkat",...getLog().map(x=>[x.t,x.p,x.a,x.d,x.l||"-"].join(","))].join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows],{type:"text/csv"}));a.download="riwayat-yogalign.csv";a.click();};
+$("clr").onclick=()=>{if(confirm("Hapus semua riwayat latihan?")){try{localStorage.removeItem(KEY)}catch(e){}renderLog();}};
+let inh=false;setInterval(()=>{inh=!inh;$("breath-t").textContent=inh?"Hembuskan":"Tarik napas"},4000);
+renderLog();
+const setHTML=(id,v)=>{const e=$(id); if(e.dataset.v!==v){e.dataset.v=v; e.innerHTML=v;}};
+function renderTimer(){const s=Math.min(hold/1000,HOLD_TARGET);$("timer-text").textContent=s.toFixed(1);$("timer-display").textContent=s.toFixed(1)+"s";$("tbar").style.width=s/HOLD_TARGET*100+"%";return s;}
+function decay(d){ghostOp(false);if(!isCompleted){hold=Math.max(0,hold-Math.min(d,200)*2);renderTimer();}}
+
+// Toggle Tombol Volume
+$("vol-toggle").onclick = () => {
+    soundEnabled = !soundEnabled;
+    $("vol-toggle").textContent = soundEnabled ? "🔊" : "🔇";
+    if(!soundEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+    }
+};
+
+// Toggle Fullscreen Mode
+const setFs=on=>{
+    document.body.classList.toggle("fullscreen-mode",on);
+    $("fs-toggle").textContent=on?"🗗":"⛶";
+    try{
+      if(on&&!document.fullscreenElement) document.documentElement.requestFullscreen?.()?.catch(()=>{});
+      else if(!on&&document.fullscreenElement) document.exitFullscreen?.();
+    }catch(e){}
+};
+$("fs-toggle").onclick=()=>setFs(!document.body.classList.contains("fullscreen-mode"));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setFs(false)});
+document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement)setFs(false)});
+
+function speakInstruction(message) {
+    if (!soundEnabled) return;
+    let now = Date.now();
+    if ('speechSynthesis' in window && (message !== lastSpokenText || now - lastSpeechTime > 5000)) {
+        window.speechSynthesis.cancel();
+        let speech = new SpeechSynthesisUtterance(message);
+        speech.lang = 'id-ID';
+        speech.rate = 1.0;
+        window.speechSynthesis.speak(speech);
+        lastSpokenText = message;
+        lastSpeechTime = now;
+    }
+}
+
+function playSuccessSound() {
+    if (!soundEnabled) return;
+    try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        let now = audioCtx.currentTime;
+        let osc1 = audioCtx.createOscillator();
+        let gain1 = audioCtx.createGain();
+        osc1.type = 'triangle';
+        osc1.frequency.setValueAtTime(523.25, now);
+        osc1.connect(gain1); gain1.connect(audioCtx.destination);
+        osc1.start(now); osc1.stop(now + 0.15);
+
+        let osc2 = audioCtx.createOscillator();
+        let gain2 = audioCtx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(659.25, now + 0.15);
+        osc2.connect(gain2); gain2.connect(audioCtx.destination);
+        osc2.start(now + 0.15); osc2.stop(now + 0.4);
+    } catch(e) {}
+}
+
 const P={ls:11,rs:12,le:13,re:14,lw:15,rw:16,lh:23,rh:24,lk:25,rk:26,la:27,ra:28};
 const ang=(a,b,c)=>{let d=Math.abs((Math.atan2(c.y-b.y,c.x-b.x)-Math.atan2(a.y-b.y,a.x-b.x))*180/Math.PI);return d>180?360-d:d};
 const hist={};
 const smooth=(k,v)=>{(hist[k]=hist[k]||[]).push(v);if(hist[k].length>5)hist[k].shift();return hist[k].reduce((a,b)=>a+b)/hist[k].length};
 
-// Mesin Deteksi 7 Pose Yoga
 function evalPose(lm){
  const g={};for(const k in P)g[k]=lm[P[k]];
- if(Object.values(g).some(p=>(p.visibility??1)<0.5))return null;
+ if(Object.values(g).some(p=>(p.visibility??1)<0.35))return null;
  
- // Kalkulasi sudut global
  const lk=smooth("lk",ang(g.lh,g.lk,g.la)), rk=smooth("rk",ang(g.rh,g.rk,g.ra));
  const le=smooth("le",ang(g.ls,g.le,g.lw)), re=smooth("re",ang(g.rs,g.re,g.rw));
  const lsh=smooth("lsh",ang(g.lh,g.ls,g.le)), rsh=smooth("rsh",ang(g.rh,g.rs,g.re));
  const sw=Math.abs(g.ls.x-g.rs.x), hw=Math.abs(g.lh.x-g.rh.x);
- const fw=Math.abs(g.la.x-g.ra.x); // Lebar pijakan kaki
+ const fw=Math.abs(g.la.x-g.ra.x);
+ const tilt=Math.abs(Math.atan2((g.ls.x+g.rs.x)-(g.lh.x+g.rh.x),(g.lh.y+g.rh.y)-(g.ls.y+g.rs.y)))*180/Math.PI;
+ const leanLeft=(g.ls.x+g.rs.x)>(g.lh.x+g.rh.x), frontLeft=lk<rk;
  const c=(ok,y,n)=>({ok,t:ok?y:n});
 
  switch(cur) {
   case "war":
    const fk1 = Math.min(lk, rk), bk1 = Math.max(lk, rk);
    return [
-    c(le>160,"Siku kiri lurus","Luruskan siku kiri"),
-    c(re>160,"Siku kanan lurus","Luruskan siku kanan"),
-    c(Math.abs(g.lw.y-g.ls.y)<.5*sw&&Math.abs(g.rw.y-g.rs.y)<.5*sw,"Lengan sejajar bahu","Angkat/turunkan lengan hingga sejajar bahu"),
-    c(fw>1.2*sw,"Lebar kaki cukup","Lebarkan jarak kedua kaki"),
-    c(fk1>=80&&fk1<=125,"Lutut depan tertekuk","Tekuk lutut depan lebih dalam"),
-    c(bk1>160,"Lutut belakang lurus","Luruskan lutut belakang")
+    c(le>160-tol,"Siku kiri lurus","Luruskan siku kiri"),
+    c(re>160-tol,"Siku kanan lurus","Luruskan siku kanan"),
+    c(Math.abs(g.lw.y-g.ls.y)<.5*sw&&Math.abs(g.rw.y-g.rs.y)<.5*sw,"Lengan sejajar bahu","Sejajarkan lengan dengan bahu"),
+    c(fw>1.2*sw,"Lebar kaki cukup","Lebarkan jarak kaki"),
+    c(fk1>=80-tol&&fk1<=125+tol,"Lutut depan tertekuk","Tekuk lutut depan"),
+    c(bk1>160-tol,"Lutut belakang lurus","Luruskan kaki belakang")
    ];
-   
   case "tree":
    const leftStand=lk>rk;
    const st=leftStand?{k:lk,kn:g.lk,h:g.lh}:{k:rk,kn:g.rk,h:g.rh};
    const bt=leftStand?{k:rk,a:g.ra}:{k:lk,a:g.la};
    return [
-    c(st.k>160,"Kaki penopang lurus","Luruskan kaki penopang"),
-    c(bt.k<120,"Lutut terangkat tertekuk","Tekuk lutut kaki yang diangkat"),
-    c(bt.a.y<st.kn.y+.05,"Telapak kaki diangkat","Angkat telapak kaki ke betis/paha"),
-    c(Math.abs(bt.a.x-st.h.x)<hw*1.5,"Kaki menempel","Rapatkan telapak kaki ke penopang")
+    c(st.k>160-tol,"Kaki penopang lurus","Luruskan penopang"),
+    c(bt.k<120+tol,"Kaki terangkat tertekuk","Tekuk lutut kaki angkat"),
+    c(bt.a.y<st.kn.y+.05,"Posisi kaki benar","Angkat telapak ke betis atau paha")
    ];
-   
-  case "chair":
-   return [
-    c(lk>=90 && lk<=150 && rk>=90 && rk<=150, "Kedua lutut ditekuk", "Tekuk lutut seperti duduk di kursi"),
-    c(lsh>130 && rsh>130, "Lengan terangkat ke atas", "Angkat lurus kedua lengan ke atas"),
-    c(le>150 && re>150, "Siku lurus", "Luruskan lenganmu")
-   ];
-
   case "goddess":
    return [
-    c(fw>1.2*sw, "Kaki terbuka lebar", "Buka kakimu lebih lebar"),
-    c(lk>=80 && lk<=130 && rk>=80 && rk<=130, "Lutut ditekuk (Squat)", "Tekuk kedua lututmu"),
-    c(lsh>=70 && lsh<=120 && rsh>=70 && rsh<=120, "Lengan sejajar bahu", "Angkat siku sejajar bahu"),
-    c(le>=70 && le<=120 && re>=70 && re<=120, "Siku ditekuk 90°", "Tekuk siku (bentuk kaktus)")
+    c(fw>1.2*sw, "Kaki terbuka lebar", "Buka kaki lebih lebar"),
+    c(lk>=80-tol && lk<=130+tol && rk>=80-tol && rk<=130+tol, "Lutut ditekuk (Squat)", "Tekuk kedua lutut"),
+    c(le>=70-tol && le<=120+tol && re>=70-tol && re<=120+tol, "Siku ditekuk 90°", "Tekuk siku ke atas")
    ];
-
-  case "lunge":
-   const fl2 = Math.min(lk, rk), bl2 = Math.max(lk, rk);
-   return [
-    c(fl2>=70 && fl2<=115, "Lutut depan ditekuk 90°", "Tekuk lutut depan"),
-    c(bl2>150, "Kaki belakang ditarik lurus", "Luruskan kaki belakang"),
-    c(lsh>130 && rsh>130, "Lengan lurus ke atas", "Angkat kedua lengan ke atas")
-   ];
-
   case "triangle":
    return [
-    c(fw>1.2*sw, "Kaki terbuka lebar", "Buka kaki lebih lebar"),
-    c(lk>160 && rk>160, "Kedua lutut lurus", "Luruskan kedua lutut"),
-    c(le>160 && re>160, "Kedua lengan lurus", "Luruskan lengan"),
-    c(lsh>70 && rsh>70, "Lengan direntangkan", "Rentangkan lenganmu")
+    c(Math.abs(Math.atan2((g.ls.x+g.rs.x)-(g.lh.x+g.rh.x),(g.lh.y+g.rh.y)-(g.ls.y+g.rs.y)))*180/Math.PI>35-tol/2,"Badan condong ke samping","Condongkan badan ke samping"),
+    c(fw>1.2*sw, "Kaki terbuka lebar","Buka kaki lebih lebar"),
+    c(lk>160-tol && rk>160-tol, "Kedua lutut lurus","Luruskan lututmu"),
+    c(le>160-tol && re>160-tol && Math.abs(g.lw.y-g.rw.y)>1.2*sw, "Satu tangan ke atas, satu ke bawah","Satu tangan ke atas, satu ke bawah")
    ];
-
+  case "salute":
+   return [
+    c(lk>160-tol&&rk>160-tol,"Kaki tegak lurus","Luruskan kedua kaki"),
+    c(le>160-tol&&re>160-tol,"Siku lurus","Luruskan kedua lengan"),
+    c(g.lw.y<g.ls.y&&g.rw.y<g.rs.y&&lsh>140-tol&&rsh>140-tol,"Lengan di atas kepala","Angkat kedua lengan ke atas")
+   ];
+  case "revwar":{
+   const f=Math.min(lk,rk), b=Math.max(lk,rk);
+   return [
+    c(fw>1.2*sw,"Lebar kaki cukup","Lebarkan jarak kaki"),
+    c(f>=80-tol&&f<=125+tol,"Lutut depan tertekuk","Tekuk lutut depan"),
+    c(b>160-tol,"Kaki belakang lurus","Luruskan kaki belakang"),
+    c(Math.min(g.lw.y,g.rw.y)<Math.min(g.ls.y,g.rs.y)-.5*sw,"Satu lengan terangkat","Angkat satu lengan ke atas"),
+    c(tilt>15-tol/2&&leanLeft!==frontLeft,"Badan condong ke belakang","Condongkan badan menjauhi lutut depan")
+   ];}
+  case "sideangle":{
+   const f=Math.min(lk,rk), b=Math.max(lk,rk);
+   return [
+    c(fw>1.2*sw,"Lebar kaki cukup","Lebarkan jarak kaki"),
+    c(f>=80-tol&&f<=125+tol,"Lutut depan tertekuk","Tekuk lutut depan"),
+    c(b>160-tol,"Kaki belakang lurus","Luruskan kaki belakang"),
+    c(Math.min(g.lw.y,g.rw.y)<Math.min(g.ls.y,g.rs.y)-.5*sw,"Satu lengan menjangkau ke atas","Jangkau satu lengan ke atas kepala"),
+    c(tilt>25-tol/2&&leanLeft===frontLeft,"Badan condong ke lutut depan","Condongkan badan ke arah lutut depan")
+   ];}
+  case "halfmoon":{
+   const sL=g.la.y>g.ra.y, up=sL?g.ra:g.la, hip=sL?g.rh:g.lh;
+   return [
+    c(lk>160-tol&&rk>160-tol,"Kedua kaki lurus","Luruskan kedua kaki"),
+    c(Math.abs(up.y-hip.y)<sw*(1+tol/30),"Kaki terangkat sejajar pinggul","Angkat satu kaki ke samping setinggi pinggul"),
+    c(tilt>45-tol/2,"Badan miring ke samping","Miringkan badan ke samping"),
+    c(le>160-tol&&re>160-tol&&Math.abs(g.lw.y-g.rw.y)>1.2*sw,"Satu tangan ke atas, satu ke bawah","Satu tangan ke atas, satu ke bawah")
+   ];}
+  case "sidebend":
+   return [
+    c(lk>160-tol&&rk>160-tol,"Kaki tegak lurus","Luruskan kedua kaki"),
+    c(le>160-tol&&re>160-tol&&g.lw.y<g.ls.y&&g.rw.y<g.rs.y,"Kedua lengan lurus di atas kepala","Angkat dan luruskan kedua lengan"),
+    c(tilt>20-tol/2,"Badan melengkung ke samping","Lengkungkan badan ke samping")
+   ];
   case "mountain":
    return [
-    c(lk>160 && rk>160, "Berdiri tegak", "Luruskan kedua lutut"),
-    c(fw < hw * 1.5, "Kaki dirapatkan", "Rapatkan kakimu"),
-    c(lsh<45 && rsh<45, "Lengan di samping badan", "Turunkan lengan ke bawah"),
-    c(le>150 && re>150, "Siku lurus", "Luruskan lengan")
+    c(lk>160-tol && rk>160-tol, "Berdiri tegak lurus","Berdiri tegak lurus"),
+    c(lsh<45+tol && rsh<45+tol, "Lengan di samping","Turunkan lengan ke bawah")
    ];
  }
 }
 
-let hold=0,last=performance.now(),lastBad=0,lastT=-1;
+let last=performance.now();
 
-// Konfigurasi Gambar Siluet
 const GHOST_DATA = {
- "war": { src: "Warior_siluet.png", scale: "scale(0.65)" },
- "tree": { src: "Tree_Pose.png", scale: "scale(0.80)" },
- "chair": { src: "chair_siluet.png", scale: "scale(0.70)" },
- "goddess": { src: "goddess_siluet.png", scale: "scale(0.70)" },
- "lunge": { src: "lunge_siluet.png", scale: "scale(0.65)" },
- "triangle": { src: "triangle_siluet.png", scale: "scale(0.70)" },
- "mountain": { src: "mountain_siluet.png", scale: "scale(0.85)" }
+ "salute": { src: "img/Upward_Salute.png", scale: "scale(0.70)" },
+ "revwar": { src: "img/Reverse_Warrior.png", scale: "scale(0.70)" },
+ "sideangle": { src: "img/Extended_Side_Angle.png", scale: "scale(0.70)" },
+ "halfmoon": { src: "img/Half_Moon.png", scale: "scale(0.70)" },
+ "sidebend": { src: "img/Standing_Side_Bend.png", scale: "scale(0.70)" },
+ "war": { src: "img/Warior_siluet.png", scale: "scale(0.65)" },
+ "tree": { src: "img/Tree_Pose.png", scale: "scale(0.80)" },
+ "goddess": { src: "img/Goddess_Pose.png", scale: "scale(0.70)" },
+ "triangle": { src: "img/Triangle_Yoga.png", scale: "scale(0.70)" },
+ "mountain": { src: "img/Mountain_Yoga.png", scale: "scale(0.85)" }
 };
 
+function loadGhost(p){
+ const el=$("ghost"), warn=$("ghost-warn"), f=GHOST_DATA[p].src.replace(/^img\//,"");
+ const c=["img/"+f, f, "/img/"+f, "img/"+f.toLowerCase()];
+ if(p==="war") c.push("img/Warior.png","Warior.png");
+ let i=0; el.style.display=""; warn.classList.add("hidden");
+ el.onload=()=>warn.classList.add("hidden");
+ el.onerror=()=>{ if(++i<c.length) el.src=c[i]; else { el.style.display="none"; warn.textContent="Siluet tidak ditemukan: img/"+f; warn.classList.remove("hidden"); } };
+ el.src=c[0];
+}
 function setPose(p){
  cur=p;
- // Nyalakan tab yang aktif
- const allPoses = ["war", "tree", "chair", "goddess", "lunge", "triangle", "mountain"];
- allPoses.forEach(pos => {
+ POSES.forEach(pos => {
   const btn = $("t-" + pos);
   if(btn) btn.classList.toggle("on", p === pos);
  });
 
+ $("demo-name").textContent=INFO[p].n;
  $("steps").innerHTML=INFO[p].steps.map(s=>`<li>${s}</li>`).join("");
  $("ben").innerHTML=INFO[p].ben.map(s=>`<li>• ${s}</li>`).join("");
  
- // Ganti gambar bayangan & skalanya
  const ghostEl = $("ghost");
  if(ghostEl && GHOST_DATA[p]) {
-  ghostEl.src = GHOST_DATA[p].src;
-  ghostEl.style.transform = GHOST_DATA[p].scale;
+  loadGhost(p);
+  flipped=false; applyGhost();
  }
- 
  hold=0;
+ isCompleted = false;
+ lastSpokenText = "";
+ errKey="";
+ for(const k in hist)delete hist[k];
+ accSum=0;accN=0;
+ window.speechSynthesis?.cancel();
+ renderTimer();
 }
 
-// Pasang Event Listener ke semua tombol
-["war", "tree", "chair", "goddess", "lunge", "triangle", "mountain"].forEach(pos => {
- $("t-" + pos).onclick = () => setPose(pos);
+POSES.forEach(pos => {
+ $("t-"+pos).onclick = () => setPose(pos);
 });
-
-setPose("war");
+setPose("mountain");
 
 function update(res){
- const now=performance.now(),dt=now-last;last=now;
- const cv=$("c"),ctx=cv.getContext("2d");
+ const now=performance.now(), dt=now-last; last=now;
+ const cv=$("c"), ctx=cv.getContext("2d");
  ctx.clearRect(0,0,cv.width,cv.height);
+ 
  const lm=res.landmarks[0];
- if(!lm){$("badge").textContent="Tubuh tidak terdeteksi";return}
+ const banner=$("feedback-banner");
+ const titleEl=$("feedback-title");
+ const descEl=$("feedback-desc");
+
+ if(!lm){
+  decay(dt);
+  banner.style.borderColor = "var(--bad)";
+  titleEl.textContent = "TUBUH BELUM TERDETEKSI";
+  descEl.textContent = "Mundur perlahan agar seluruh badan masuk frame";
+  setHTML("checks","<li>Sendi belum terlihat penuh di kamera</li>");
+  return;
+ }
+
  const ch=evalPose(lm);
  let color="#e0a82e";
- if(!ch){$("badge").textContent="Pastikan seluruh tubuh terlihat kamera";$("checks").innerHTML="<li>Sendi belum terlihat penuh</li>";}
- else{
-  const n=ch.filter(x=>x.ok).length,all=n===ch.length;
-  color=all?"#1f9d55":"#d64545";
+
+ if(!ch){
+  decay(dt);
+  banner.style.borderColor = "var(--bad)";
+  titleEl.textContent = "POSISI KURANG PAS";
+  descEl.textContent = "Pastikan seluruh tubuh tampak jelas";
+  setHTML("checks","<li>Sesuaikan posisi berdiri</li>");
+ } else {
+  const n=ch.filter(x=>x.ok).length, all=n===ch.length;
+  ghostOp(all);
+  color = all ? "#2e8b57" : "#d96b6b";
+  
   const pct=Math.round(n/ch.length*100);
-  $("score").textContent=pct+"\%";$("sbar").style.width=pct+"%";
-  $("checks").innerHTML=ch.map(x=>`<li class="${x.ok?"ok":"no"}">${x.ok?"✔":"✖"} ${x.t}</li>`).join("");
-  if(all){hold+=dt;lastBad=0}else{lastBad+=dt;if(lastBad>600)hold=0}
-  const s=Math.min(hold/1000,10);
-  $("timer").textContent=s.toFixed(1);$("tbar").style.width=s*10+"%";
-  $("badge").textContent=s>=10?INFO[cur].n+": SELESAI! Kerja bagus":all?INFO[cur].n+": BAGUS! Tahan posisi":ch.find(x=>!x.ok).t;
+  $("score").textContent=pct+"%";
+  $("sbar").style.width=pct+"%";
+  if(!isCompleted){accSum+=pct;accN++;}
+  
+  setHTML("checks",ch.map(x=>`<li class="${x.ok?"ok":"no"}">${x.ok?"✓":"✕"} ${x.t}</li>`).join(""));
+  
+  if(!isCompleted) {
+   if(all){
+    hold += Math.min(dt,200); errKey=""; 
+    banner.style.borderColor = "var(--ok)";
+    titleEl.textContent = "NAMASTE — BAGUS SEKALI";
+    descEl.textContent = "Tahan postur dengan pernapasan stabil";
+   } else {
+    decay(dt);
+    const firstErr = ch.find(x=>!x.ok);
+    banner.style.borderColor = "var(--bad)";
+    titleEl.textContent = "PENYELARASAN (ALIGNMENT)";
+    descEl.textContent = firstErr ? firstErr.t : "Sesuaikan gerakan";
+    
+    if(firstErr) {
+        if(errKey!==firstErr.t){errKey=firstErr.t;errSince=now;}
+        else if(now-errSince>1200) speakInstruction(firstErr.t);
+    }
+   }
+  }
+
+  const s = renderTimer();
+
+  if(s >= HOLD_TARGET && !isCompleted) {
+   isCompleted = true;
+   logRun();
+   if(ASYM.has(cur) && !flipped){
+    flipped=true; applyGhost();
+    doneMsg="Sisi pertama selesai. Siluet dibalik, lanjutkan ke sisi sebaliknya.";
+    setTimeout(()=>{ if(isCompleted && flipped){hold=0;isCompleted=false;accSum=0;accN=0;renderTimer();} },4500);
+   } else {
+    if(ASYM.has(cur)){flipped=false; applyGhost();}
+    done.add(cur); $("t-"+cur).classList.add("done");
+    doneMsg=ASYM.has(cur)?"Kedua sisi selesai. Kerja bagus!":"Pose selesai. Kerja bagus!";
+    if($("flow").checked){doneMsg+=" Lanjut ke pose berikutnya."; setTimeout(nextPose,5000);}
+   }
+   banner.style.borderColor = "var(--ok)";
+   titleEl.textContent = "SELESAI DENGAN BAIK ✨";
+   descEl.textContent = doneMsg;
+   
+   playSuccessSound();
+   speakInstruction(doneMsg);
+  }
  }
+
  const du=new DrawingUtils(ctx);
  du.drawConnectors(lm,PoseLandmarker.POSE_CONNECTIONS,{color,lineWidth:4});
- du.drawLandmarks(lm,{color:"#fff",fillColor:color,radius:3});
+ du.drawLandmarks(lm,{color:"#fff",fillColor:color,radius:4});
 }
 
 function loop(){
+ if(!camOn)return;
  const v=$("v");
  if(v.currentTime!==lastT&&v.readyState>=2){
   lastT=v.currentTime;
-  const cv=$("c");if(cv.width!==v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight}
-  update(pl.detectForVideo(v,performance.now()));
+  const vw=v.videoWidth, vh=v.videoHeight, cv=$("c");
+  const ow=Math.min(vw,1280), oh=Math.round(ow*vh/vw);
+  if(cv.width!==ow||cv.height!==oh){cv.width=ow;cv.height=oh;$("stage-container").style.setProperty("--ar",vw+" / "+vh);}
+  const dw=Math.min(vw,DET_W), dh=Math.round(dw*vh/vw);
+  if(dc.width!==dw||dc.height!==dh){dc.width=dw;dc.height=dh;}
+  dcx.drawImage(v,0,0,dw,dh);
+  update(pl.detectForVideo(dc,performance.now()));
  }
- requestAnimationFrame(loop);
+ rafId=requestAnimationFrame(loop);
 }
 
+let lastT = -1;
+$("reset").onclick=()=>{flipped=false;applyGhost();accSum=0;accN=0;hold=0;isCompleted=false;lastSpokenText="";errKey="";window.speechSynthesis?.cancel();renderTimer();};
 $("go").onclick=async()=>{
- $("go").disabled=true;$("go").textContent="Memuat model...";
+ $("go").disabled=true; $("go").textContent="Menyiapkan Ruang AI...";
  try{
   const fs=await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/wasm");
-  pl=await PoseLandmarker.createFromOptions(fs,{
-   baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",delegate:"GPU"},
+  const mk=d=>PoseLandmarker.createFromOptions(fs,{
+   baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",delegate:d},
    runningMode:"VIDEO",numPoses:1});
-  const stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480}});
-  $("v").srcObject=stream;await $("v").play();
-  $("start").classList.add("hidden");last=performance.now();loop();
- }catch(e){$("go").disabled=false;$("go").textContent="Coba lagi";alert("Gagal memulai: "+e.message)}
+  try{pl=await mk("GPU")}catch(_){pl=await mk("CPU")}
+  await camStart();
+  $("start").classList.add("hidden");
+ }catch(e){$("go").disabled=false;$("go").textContent="Coba lagi";$("start").querySelector("p").textContent=e.name==="NotAllowedError"?"Izin kamera ditolak. Aktifkan izin kamera di browser, lalu coba lagi.":"Gagal memulai: "+e.message}
 };
 </script>
 </body>
