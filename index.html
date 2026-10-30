@@ -253,6 +253,11 @@ header{padding:28px 24px 64px;background:url("data:image/svg+xml,%3Csvg xmlns='h
 .demo-box a{color:var(--ac);font-weight:700}
 #ghost-warn{position:absolute;left:12px;top:12px;z-index:5;max-width:60%;background:rgba(201,96,79,.92);color:#fff;padding:6px 10px;border-radius:10px;font-size:.8rem;line-height:1.35}
 </style>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4d7340">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
 <header>
@@ -605,7 +610,7 @@ const GHOST_DATA = {
  "sideangle": { src: "img/Extended_Side_Angle.png", scale: "scale(0.70)" },
  "halfmoon": { src: "img/Half_Moon.png", scale: "scale(0.70)" },
  "sidebend": { src: "img/Standing_Side_Bend.png", scale: "scale(0.70)" },
- "war": { src: "img/Warior_siluet.png", scale: "scale(0.65)" },
+ "war": { src: "img/Warrior.png", scale: "scale(0.65)" },
  "tree": { src: "img/Tree_Pose.png", scale: "scale(0.80)" },
  "goddess": { src: "img/Goddess_Pose.png", scale: "scale(0.70)" },
  "triangle": { src: "img/Triangle_Yoga.png", scale: "scale(0.70)" },
@@ -651,6 +656,7 @@ POSES.forEach(pos => {
  $("t-"+pos).onclick = () => setPose(pos);
 });
 setPose("mountain");
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 
 function update(res){
  const now=performance.now(), dt=now-last; last=now;
